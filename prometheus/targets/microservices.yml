@@ -14,10 +14,10 @@
     environment: lab
     service: identity-service
   targets:
-    - http://192.168.1.42:8020/health
+    - http://100.83.57.43:8020/health
 
 - labels:
     environment: lab
     service: order-service
   targets:
-    - http://192.168.1.43:8030/health
+    - http://100.108.225.1:8030/health
