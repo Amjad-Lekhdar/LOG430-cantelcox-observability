@@ -1,0 +1,23 @@
+- labels:
+    environment: lab
+    service: api-gateway
+  targets:
+    - http://192.168.1.40:8000/health
+
+- labels:
+    environment: lab
+    service: bss-core
+  targets:
+    - http://192.168.1.41:8010/health
+
+- labels:
+    environment: lab
+    service: identity-service
+  targets:
+    - http://192.168.1.42:8020/health
+
+- labels:
+    environment: lab
+    service: order-service
+  targets:
+    - http://192.168.1.43:8030/health

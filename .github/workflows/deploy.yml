@@ -1,0 +1,39 @@
+name: Deploy observability stack
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+concurrency:
+  group: observability-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Deploy on VM
+    runs-on: self-hosted
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Write runtime environment
+        run: |
+          cat > .env <<EOF
+          GRAFANA_ADMIN_USER=${{ secrets.GRAFANA_ADMIN_USER || 'admin' }}
+          GRAFANA_ADMIN_PASSWORD=${{ secrets.GRAFANA_ADMIN_PASSWORD || 'change-me' }}
+          EOF
+
+      - name: Validate Docker Compose config
+        run: docker compose config --quiet
+
+      - name: Pull container images
+        run: docker compose pull
+
+      - name: Deploy stack
+        run: docker compose up -d --remove-orphans
+
+      - name: Show running services
+        run: docker compose ps
