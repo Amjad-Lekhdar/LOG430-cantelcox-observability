@@ -49,7 +49,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
+        "h": 5,
         "w": 24,
         "x": 0,
         "y": 0
@@ -80,11 +80,11 @@
           },
           "expr": "probe_success{job=\"blackbox-http-health\", instance=~\"http://100\\\\..*\"}",
           "instant": true,
-          "legendFormat": "{{ instance }}",
+          "legendFormat": "{{ service }}",
           "refId": "A"
         }
       ],
-      "title": "Service Health",
+      "title": "VM Service Health",
       "type": "stat"
     },
     {
@@ -94,15 +94,32 @@
       },
       "fieldConfig": {
         "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 0.5
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          },
           "unit": "s"
         },
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 24,
+        "h": 7,
+        "w": 12,
         "x": 0,
-        "y": 8
+        "y": 5
       },
       "id": 2,
       "options": {
@@ -115,7 +132,7 @@
           "showLegend": true
         },
         "tooltip": {
-          "mode": "single",
+          "mode": "multi",
           "sort": "none"
         }
       },
@@ -125,12 +142,132 @@
             "type": "prometheus",
             "uid": "Prometheus"
           },
-          "expr": "probe_duration_seconds{job=\"blackbox-http-health\", instance=~\"http://100\\\\..*\"}",
-          "legendFormat": "{{ instance }}",
+          "expr": "quantile_over_time(0.95, probe_duration_seconds{job=\"blackbox-http-health\", instance=~\"http://100\\\\..*\"}[5m])",
+          "legendFormat": "{{ service }}",
           "refId": "A"
         }
       ],
-      "title": "HTTP Probe Duration",
+      "title": "VM Latency P95",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "Prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "yellow",
+                "value": 70
+              },
+              {
+                "color": "red",
+                "value": 90
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 5
+      },
+      "id": 3,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "Prometheus"
+          },
+          "expr": "100 - (avg by (machine) (rate(node_cpu_seconds_total{job=\"node-exporter\", mode=\"idle\"}[5m])) * 100)",
+          "legendFormat": "{{ machine }}",
+          "refId": "A"
+        }
+      ],
+      "title": "VM CPU Usage",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "Prometheus"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              }
+            ]
+          },
+          "unit": "bps"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 24,
+        "x": 0,
+        "y": 12
+      },
+      "id": 4,
+      "options": {
+        "legend": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "Prometheus"
+          },
+          "expr": "sum by (machine) (rate(node_network_receive_bytes_total{job=\"node-exporter\", device!~\"lo|docker.*|br-.*|veth.*\"}[5m]) * 8)",
+          "legendFormat": "{{ machine }}",
+          "refId": "A"
+        }
+      ],
+      "title": "VM Network Throughput In",
       "type": "timeseries"
     }
   ],
@@ -149,8 +286,8 @@
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "CanTelcoX Service Health",
+  "title": "CanTelcoX VM Observability",
   "uid": "cantelcox-service-health",
-  "version": 1,
+  "version": 2,
   "weekStart": ""
 }

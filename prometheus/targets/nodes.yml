@@ -1,0 +1,11 @@
+- labels:
+    environment: lab
+    machine: identity-service
+  targets:
+    - 100.83.57.43:9100
+
+- labels:
+    environment: lab
+    machine: order-service
+  targets:
+    - 100.108.225.1:9100

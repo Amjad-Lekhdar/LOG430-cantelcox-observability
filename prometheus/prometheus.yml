@@ -26,3 +26,9 @@ scrape_configs:
         target_label: instance
       - target_label: __address__
         replacement: blackbox-exporter:9115
+
+  - job_name: node-exporter
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/targets/nodes.yml
+        refresh_interval: 30s
