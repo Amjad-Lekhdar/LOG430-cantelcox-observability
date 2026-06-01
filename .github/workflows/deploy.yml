@@ -33,7 +33,10 @@ jobs:
         run: docker compose pull
 
       - name: Deploy stack
-        run: docker compose up -d --remove-orphans
+        run: docker compose up -d
+
+      - name: Restart Grafana and Prometheus
+        run: docker compose restart grafana prometheus
 
       - name: Show running services
         run: docker compose ps
