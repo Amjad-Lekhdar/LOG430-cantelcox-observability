@@ -50,7 +50,7 @@ Service health checks are probed through Blackbox Exporter from [prometheus/targ
     environment: lab
     service: identity-service
   targets:
-    - http://100.83.57.43:8020/health
+    - http://10.126.16.45:8020/health
 ```
 
 Node Exporter targets are listed in [prometheus/targets/nodes.yml](prometheus/targets/nodes.yml):
@@ -60,7 +60,7 @@ Node Exporter targets are listed in [prometheus/targets/nodes.yml](prometheus/ta
     environment: lab
     machine: identity-service
   targets:
-    - 100.83.57.43:9100
+    - 10.126.16.45:9100
 ```
 
 Prometheus refreshes both target files every 30 seconds.
