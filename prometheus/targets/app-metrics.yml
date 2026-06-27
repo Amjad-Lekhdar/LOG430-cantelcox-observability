@@ -1,0 +1,8 @@
+# Add service /metrics endpoints here once they expose Prometheus metrics.
+# Example:
+# - labels:
+#     environment: lab
+#     service: catalog-service
+#   targets:
+#     - 100.95.65.46:8040
+[]

@@ -8,7 +8,7 @@ Docker Compose observability stack for the CanTelcoX lab services. It runs Prome
 - Grafana `11.1.4` on <http://localhost:3000>
 - Blackbox Exporter `v0.25.0` on <http://localhost:9115>
 - Provisioned Grafana datasource and dashboard folder
-- Prometheus file discovery for service health checks and node metrics
+- Prometheus file discovery for service health checks, application metrics, and node metrics
 
 ## Prerequisites
 
@@ -50,7 +50,7 @@ Service health checks are probed through Blackbox Exporter from [prometheus/targ
     environment: lab
     service: identity-service
   targets:
-    - http://10.126.16.45:8020/health
+    - http://100.83.57.43:8020/health
 ```
 
 Node Exporter targets are listed in [prometheus/targets/nodes.yml](prometheus/targets/nodes.yml):
@@ -60,10 +60,12 @@ Node Exporter targets are listed in [prometheus/targets/nodes.yml](prometheus/ta
     environment: lab
     machine: identity-service
   targets:
-    - 10.126.16.45:9100
+    - 100.83.57.43:9100
 ```
 
-Prometheus refreshes both target files every 30 seconds.
+Application `/metrics` targets are listed in [prometheus/targets/app-metrics.yml](prometheus/targets/app-metrics.yml) once services expose Prometheus metrics.
+
+Prometheus refreshes all target files every 30 seconds.
 
 ## Grafana Provisioning
 
@@ -72,6 +74,12 @@ Grafana automatically provisions:
 - Prometheus datasource from [grafana/provisioning/datasources/prometheus.yml](grafana/provisioning/datasources/prometheus.yml)
 - Dashboards from [grafana/dashboards](grafana/dashboards)
 - Dashboard provider from [grafana/provisioning/dashboards/dashboards.yml](grafana/provisioning/dashboards/dashboards.yml)
+
+## Documentation
+
+- Backlog observability: [docs/backlog.md](docs/backlog.md)
+- Runbook: [docs/runbook.md](docs/runbook.md)
+- Architecture sections 8.8 and 10.5: [docs/architecture.md](docs/architecture.md)
 
 ## Useful Commands
 
