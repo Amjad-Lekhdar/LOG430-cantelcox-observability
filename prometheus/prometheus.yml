@@ -33,6 +33,15 @@ scrape_configs:
           - /etc/prometheus/targets/nodes.yml
         refresh_interval: 30s
 
+  - job_name: api-gateway
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - 100.85.152.43:8000
+        labels:
+          environment: lab
+          service: api-gateway
+
   - job_name: microservices-metrics
     metrics_path: /metrics
     file_sd_configs:
