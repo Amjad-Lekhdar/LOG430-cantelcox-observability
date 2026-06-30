@@ -267,8 +267,8 @@
             "type": "prometheus",
             "uid": "Prometheus"
           },
-          "expr": "sum by (service, status) (rate(http_server_requests_seconds_count{job=\"microservices-metrics\", status=~\"4..|5..\"}[5m])) or sum by (service, code) (rate(http_requests_total{job=\"microservices-metrics\", code=~\"4..|5..\"}[5m]))",
-          "legendFormat": "{{ service }} {{ status }}{{ code }}",
+          "expr": "sum(rate(api_gateway_http_requests_total{status=~\"4..|5..\"}[5m]))",
+          "legendFormat": "Gateway 4xx/5xx",
           "refId": "A"
         }
       ],
