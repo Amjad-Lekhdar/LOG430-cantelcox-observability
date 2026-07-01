@@ -204,8 +204,8 @@
             "type": "prometheus",
             "uid": "Prometheus"
           },
-          "expr": "sum by (service) (rate(http_server_requests_seconds_count{job=\"microservices-metrics\"}[5m])) or sum by (service) (rate(http_requests_total{job=\"microservices-metrics\"}[5m]))",
-          "legendFormat": "{{ service }}",
+          "expr": "sum(rate(api_gateway_http_requests_total[5m]))",
+          "legendFormat": "Gateway RPS",
           "refId": "A"
         }
       ],
